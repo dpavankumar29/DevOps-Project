@@ -29,8 +29,8 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh """
-                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    bat """
+                        echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
                     """
                 }
             }
@@ -38,16 +38,14 @@ pipeline {
 
         stage('Push Image to Docker Hub') {
             steps {
-                script {
-                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                }
+                bat "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
             }
         }
     }
 
     post {
         always {
-            sh 'docker logout'
+            bat 'docker logout'
         }
     }
 }
